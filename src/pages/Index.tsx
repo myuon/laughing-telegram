@@ -7,7 +7,8 @@ import {
   useFetchMetadata,
   useListAll,
 } from "../api/storage";
-import { Button } from "../components/Button";
+import { LinkButton } from "../components/Button";
+import { theme } from "../components/theme";
 
 interface MusicFileObject {
   fullPath: string;
@@ -29,11 +30,49 @@ const MusicItem = ({
 }) => {
   const { data: metadata } = useFetchMetadata(file.fullPath);
   console.log(metadata);
+  const image = metadata?.images?.[0];
 
   return (
-    <>
-      <Button onClick={onClick}>{file.name}</Button>
-    </>
+    <div
+      css={css`
+        display: grid;
+        gap: 4px;
+
+        & > *:first-child {
+          width: 250px;
+          aspect-ratio: 1;
+          border-radius: 4px;
+          box-shadow: ${theme.shadow[5]};
+
+          img {
+            width: inherit;
+            border-radius: inherit;
+          }
+        }
+      `}
+    >
+      {image ? (
+        <div>
+          <img src={`data:${image.mime ?? "image/jpg"};base64,${image.data}`} />
+        </div>
+      ) : (
+        <div
+          css={[
+            theme.typography.h3,
+            css`
+              display: grid;
+              place-items: center;
+              color: white;
+              background-color: ${theme.palette.gray[300]};
+            `,
+          ]}
+        >
+          NO IMAGE
+        </div>
+      )}
+
+      <LinkButton onClick={onClick}>{file.name}</LinkButton>
+    </div>
   );
 };
 
@@ -63,6 +102,7 @@ export const IndexPage = () => {
       <div
         css={css`
           display: grid;
+          grid-template-columns: repeat(4, 1fr);
           gap: 8px;
         `}
       >
