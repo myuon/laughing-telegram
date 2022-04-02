@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useAuth } from "../helpers/useAuth";
 import { css } from "@emotion/react";
 import {
@@ -29,8 +29,7 @@ const MusicItem = ({
   onClick: () => void;
 }) => {
   const { data: metadata } = useFetchMetadata(file.fullPath);
-  console.log(metadata);
-  const image = metadata?.images?.[0];
+  const image = useMemo(() => metadata?.images?.[0], [metadata?.images]);
 
   return (
     <div
@@ -38,7 +37,7 @@ const MusicItem = ({
         display: grid;
         gap: 4px;
 
-        & > *:first-child {
+        & > div {
           width: 250px;
           aspect-ratio: 1;
           border-radius: 4px;
