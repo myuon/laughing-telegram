@@ -11,14 +11,14 @@ import { storage } from "./firebase";
 import { Metadata, parseMetadataFromFile } from "../model/Metadata";
 
 export const useDownloadUrl = (key: string | undefined) => {
-  return useSWR(key ? [key] : null, async () => {
+  return useSWR(key ? ["downloadUrl", key] : null, async () => {
     const storageKey = ref(storage, key);
     return await getDownloadURL(storageKey);
   });
 };
 
 export const useListAll = (key: string) => {
-  return useSWR([key], async () => {
+  return useSWR(["listAll", key], async () => {
     const storageKey = ref(storage, key);
     return await (await listAll(storageKey)).items
       .map((item) => ({ fullPath: item.fullPath, name: item.name }))
@@ -27,7 +27,7 @@ export const useListAll = (key: string) => {
 };
 
 export const useFetchMetadata = (key: string) => {
-  return useSWR([key], async () => {
+  return useSWR(["fetchMetadata", key], async () => {
     const storageKey = ref(storage, `${key}.metadata`);
     const blob = await getBlob(storageKey);
     return JSON.parse(await blob.text()) as Metadata;
