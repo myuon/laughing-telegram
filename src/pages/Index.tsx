@@ -18,7 +18,7 @@ interface MusicFileObject {
 const AudioPlayer = ({ src }: { src?: string }) => {
   const { data: url } = useDownloadUrl(src);
 
-  return <audio src={url} controls autoPlay />;
+  return <audio src={url} controls autoPlay muted />;
 };
 
 const MusicItem = ({
@@ -45,8 +45,11 @@ const MusicItem = ({
           box-shadow: ${theme.shadow[5]};
 
           img {
-            width: inherit;
+            display: flex;
+            width: 100%;
+            height: 100%;
             border-radius: inherit;
+            box-shadow: ${theme.shadow[5]};
           }
         }
       `}
