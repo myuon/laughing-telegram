@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../helpers/useAuth";
 import { css } from "@emotion/react";
 import {
-  uploadMusicFileAndMetadata,
+  uploadMusicFile,
   useDownloadUrl,
   useFetchMetadata,
   useListAll,
@@ -56,7 +56,7 @@ export const IndexPage = () => {
           const file = event.currentTarget.files?.[0];
           if (!file) return;
 
-          await uploadMusicFileAndMetadata(userId, file);
+          await uploadMusicFile(userId, file);
         }}
       />
 
