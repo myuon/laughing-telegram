@@ -46,8 +46,11 @@ export const IndexPage = () => {
         `}
       >
         {files?.map((file) => (
-          <Button key={file} onClick={() => setSelected(file)}>
-            {file}
+          <Button
+            key={file.fullPath}
+            onClick={() => setSelected(file.fullPath)}
+          >
+            {file.name}
           </Button>
         ))}
       </div>

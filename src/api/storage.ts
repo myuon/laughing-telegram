@@ -12,6 +12,8 @@ export const useDownloadUrl = (key: string | undefined) => {
 export const useListAll = (key: string) => {
   return useSWR([key], async () => {
     const storageKey = ref(storage, key);
-    return await (await listAll(storageKey)).items.map((item) => item.fullPath);
+    return await (
+      await listAll(storageKey)
+    ).items.map((item) => ({ fullPath: item.fullPath, name: item.name }));
   });
 };
