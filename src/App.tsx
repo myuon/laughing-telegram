@@ -1,10 +1,12 @@
 import React from "react";
 import { BrowserRouter, useRoutes } from "react-router-dom";
+import { AuthProvider, initializeUseAuth } from "./helpers/useAuth";
 import IndexPage from "./pages/Index";
 import LoginPage from "./pages/Login";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
-  return <BrowserRouter>{children}</BrowserRouter>;
+  // initializeUseAuth depends on BrowserRouter
+  return <AuthProvider value={initializeUseAuth()}>{children}</AuthProvider>;
 };
 
 const routes = [
@@ -23,9 +25,11 @@ const AppRoutes = () => {
 
 const App = () => {
   return (
-    <Providers>
-      <AppRoutes />
-    </Providers>
+    <BrowserRouter>
+      <Providers>
+        <AppRoutes />
+      </Providers>
+    </BrowserRouter>
   );
 };
 
