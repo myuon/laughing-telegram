@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import "./firebase";
+import "ress";
 
 ReactDOM.render(
   <React.StrictMode>
