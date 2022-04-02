@@ -7,14 +7,16 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
   return <BrowserRouter>{children}</BrowserRouter>;
 };
 
+const routes = [
+  {
+    path: "/",
+    element: <IndexPage />,
+  },
+  { path: "login", element: <LoginPage /> },
+];
+
 const AppRoutes = () => {
-  const element = useRoutes([
-    {
-      path: "/",
-      element: <IndexPage />,
-    },
-    { path: "login", element: <LoginPage /> },
-  ]);
+  const element = useRoutes(routes);
 
   return element;
 };
