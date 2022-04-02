@@ -53,6 +53,7 @@ export const useInitializeUseAuth = () => {
       loading,
       login: async (token: string, userId: string) => {
         setToken(token);
+        setUserId(userId);
         await set(IDB_TOKEN_KEY, {
           token,
           userId,
@@ -62,6 +63,7 @@ export const useInitializeUseAuth = () => {
       },
       logout: async () => {
         setToken(undefined);
+        setUserId(undefined);
         await del(IDB_TOKEN_KEY);
 
         navigate("/login");
