@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import React from "react";
 import { BrowserRouter, Navigate } from "react-router-dom";
 import { SWRConfig } from "swr";
+import { PublicConfiguration } from "swr/dist/types";
 import { LinkButton } from "./components/Button";
 import { Router } from "./components/Router";
 import { AuthProvider, useAuth, useInitializeUseAuth } from "./helpers/useAuth";
@@ -9,8 +10,15 @@ import ComponentsPage from "./pages/Components";
 import IndexPage from "./pages/Index";
 import LoginPage from "./pages/Login";
 
-const swrOptions = {
+const swrOptions: Partial<PublicConfiguration> = {
   revalidateOnFocus: false,
+  onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+    // 404 in firebaes storage
+    if (error.code === "storage/object-not-found") return;
+    if (retryCount >= 5) return;
+
+    setTimeout(() => revalidate({ retryCount }), 1000 * (1 + retryCount));
+  },
 };
 
 const Providers = ({ children }: { children: React.ReactNode }) => {

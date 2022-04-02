@@ -1,15 +1,40 @@
-import { ref, uploadBytes } from "firebase/storage";
-import { storage } from "../api/firebase";
 import React, { useState } from "react";
 import { useAuth } from "../helpers/useAuth";
 import { css } from "@emotion/react";
-import { useDownloadUrl, useListAll } from "../api/storage";
+import {
+  uploadMusicFileAndMetadata,
+  useDownloadUrl,
+  useFetchMetadata,
+  useListAll,
+} from "../api/storage";
 import { Button } from "../components/Button";
+
+interface MusicFileObject {
+  fullPath: string;
+  name: string;
+}
 
 const AudioPlayer = ({ src }: { src?: string }) => {
   const { data: url } = useDownloadUrl(src);
 
   return <audio src={url} controls autoPlay />;
+};
+
+const MusicItem = ({
+  file,
+  onClick,
+}: {
+  file: MusicFileObject;
+  onClick: () => void;
+}) => {
+  const { data: metadata } = useFetchMetadata(file.fullPath);
+  console.log(metadata);
+
+  return (
+    <>
+      <Button onClick={onClick}>{file.name}</Button>
+    </>
+  );
 };
 
 export const IndexPage = () => {
@@ -31,11 +56,7 @@ export const IndexPage = () => {
           const file = event.currentTarget.files?.[0];
           if (!file) return;
 
-          const snapshot = await uploadBytes(
-            ref(storage, `/user/${userId}/${file.name}`),
-            file
-          );
-          console.log(snapshot);
+          await uploadMusicFileAndMetadata(userId, file);
         }}
       />
 
@@ -46,12 +67,11 @@ export const IndexPage = () => {
         `}
       >
         {files?.map((file) => (
-          <Button
+          <MusicItem
             key={file.fullPath}
+            file={file}
             onClick={() => setSelected(file.fullPath)}
-          >
-            {file.name}
-          </Button>
+          />
         ))}
       </div>
 
