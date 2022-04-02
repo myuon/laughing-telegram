@@ -73,12 +73,18 @@ export const IndexPage = () => {
       `}
     >
       <input
+        multiple
         type="file"
         onChange={async (event) => {
-          const file = event.currentTarget.files?.[0];
-          if (!file) return;
+          const files = event.currentTarget.files;
+          if (!files) return;
 
-          await uploadMusicFile(userId, file);
+          await Promise.allSettled(
+            Array.from(files).map(async (file) => {
+              uploadMusicFile(userId, file);
+            })
+          );
+          console.log("Upload finished");
         }}
       />
 
