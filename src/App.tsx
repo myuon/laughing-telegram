@@ -1,22 +1,29 @@
-import { ref, uploadBytes } from "firebase/storage";
-import { useState } from "react";
-import { storage } from "./firebase";
+import React from "react";
+import { BrowserRouter, useRoutes } from "react-router-dom";
+import IndexPage from "./pages/Index";
+import LoginPage from "./pages/Login";
+
+const Providers = ({ children }: { children: React.ReactNode }) => {
+  return <BrowserRouter>{children}</BrowserRouter>;
+};
+
+const AppRoutes = () => {
+  const element = useRoutes([
+    {
+      path: "/",
+      element: <IndexPage />,
+    },
+    { path: "login", element: <LoginPage /> },
+  ]);
+
+  return element;
+};
 
 const App = () => {
   return (
-    <div>
-      <input
-        type="file"
-        onChange={async (event) => {
-          const file = event.currentTarget.files?.[0];
-          if (!file) return;
-
-          const storageRef = ref(storage, "file.mp3");
-          const snapshot = await uploadBytes(storageRef, file);
-          console.log(snapshot);
-        }}
-      ></input>
-    </div>
+    <Providers>
+      <AppRoutes />
+    </Providers>
   );
 };
 

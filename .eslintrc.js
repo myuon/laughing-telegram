@@ -1,9 +1,14 @@
 module.exports = {
+  ignorePatterns: ["node_modules", "dist", ".eslintrc.js"],
   env: {
     browser: true,
     es2021: true,
   },
-  extends: ["plugin:react/recommended"],
+  extends: [
+    "plugin:react/recommended",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+  ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaFeatures: {
@@ -13,5 +18,7 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["react", "@typescript-eslint"],
-  rules: {},
+  rules: {
+    "react/self-closing-comp": "error",
+  },
 };
