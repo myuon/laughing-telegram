@@ -1,6 +1,7 @@
 export const theme = {
   width: {
     large: 1024,
+    small: 480,
   },
   typography: {
     h1: {

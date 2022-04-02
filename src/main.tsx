@@ -33,12 +33,20 @@ ReactDOM.render(
           header {
             max-width: ${theme.width.large}px;
             margin: 0 auto;
+
+            @media screen and (max-width: ${theme.width.large}px) {
+              margin: 0 16px;
+            }
           }
 
           main {
             max-width: ${theme.width.large}px;
             margin: 0 auto;
             margin-bottom: 48px;
+
+            @media screen and (max-width: ${theme.width.large}px) {
+              margin: 0 16px;
+            }
           }
 
           a {

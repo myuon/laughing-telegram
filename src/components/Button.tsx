@@ -7,6 +7,8 @@ const styles = {
   base: css`
     height: 40px;
     padding: 0 20px;
+    overflow: hidden;
+    white-space: nowrap;
     border-radius: 4px;
   `,
   icon: css`

@@ -70,8 +70,13 @@ export const CoverView = ({
     <div
       css={css`
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(5, 1fr);
         gap: 16px;
+
+        @media screen and (max-width: ${theme.width.large}px) {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 16px;
+        }
       `}
     >
       {files?.map((file) => (
