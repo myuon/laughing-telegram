@@ -1,15 +1,24 @@
 import { ref, uploadBytes } from "firebase/storage";
 import { storage } from "../api/firebase";
-import React from "react";
+import React, { useState } from "react";
 import { useAuth } from "../helpers/useAuth";
 import { css } from "@emotion/react";
-import { useDownloadUrl } from "../api/storage";
+import { useDownloadUrl, useListAll } from "../api/storage";
+import { Button } from "../components/Button";
+
+const AudioPlayer = ({ src }: { src?: string }) => {
+  const { data: url } = useDownloadUrl(src);
+
+  return <audio src={url} controls autoPlay />;
+};
 
 export const IndexPage = () => {
   const { userId } = useAuth();
-  const { data: url } = useDownloadUrl(`/user/${userId}/file.mp3`);
+  const { data: files } = useListAll(`/user/${userId}`);
 
-  return userId ? (
+  const [selected, setSelected] = useState<string>();
+
+  return (
     <div
       css={css`
         display: grid;
@@ -23,16 +32,29 @@ export const IndexPage = () => {
           if (!file) return;
 
           const snapshot = await uploadBytes(
-            ref(storage, `/user/${userId}/file.mp3`),
+            ref(storage, `/user/${userId}/${file.name}`),
             file
           );
           console.log(snapshot);
         }}
       />
 
-      <audio src={url} controls />
+      <div
+        css={css`
+          display: grid;
+          gap: 8px;
+        `}
+      >
+        {files?.map((file) => (
+          <Button key={file} onClick={() => setSelected(file)}>
+            {file}
+          </Button>
+        ))}
+      </div>
+
+      <AudioPlayer src={selected} />
     </div>
-  ) : null;
+  );
 };
 
 export default IndexPage;

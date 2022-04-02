@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 export interface AuthContextState {
   authenticated: boolean;
   loading: boolean;
-  userId: string | undefined;
-  token: string | undefined;
+  userId: string;
+  token: string;
   login: (token: string, userId: string) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -25,8 +25,9 @@ export const useInitializeUseAuth = () => {
   }
 
   const navigate = useNavigate();
-  const [token, setToken] = useState<string | undefined>();
-  const [userId, setUserId] = useState<string>();
+  // If you want to check the value is truthy, check loading to be false.
+  const [token, setToken] = useState("");
+  const [userId, setUserId] = useState("");
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (!token) {
@@ -62,8 +63,8 @@ export const useInitializeUseAuth = () => {
         navigate("/");
       },
       logout: async () => {
-        setToken(undefined);
-        setUserId(undefined);
+        setToken("");
+        setUserId("");
         await del(IDB_TOKEN_KEY);
 
         navigate("/login");
