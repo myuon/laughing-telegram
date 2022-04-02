@@ -21,7 +21,6 @@ const MusicItem = ({
         gap: 4px;
 
         button {
-          width: 250px;
           aspect-ratio: 1;
           border-radius: 4px;
           box-shadow: ${theme.shadow[5]};
@@ -72,7 +71,7 @@ export const CoverView = ({
       css={css`
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 8px;
+        gap: 16px;
       `}
     >
       {files?.map((file) => (

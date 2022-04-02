@@ -10,7 +10,8 @@ export interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
 
 const styles = {
   base: css`
-    padding: 8px 20px;
+    height: 40px;
+    padding: 0 20px;
     border-radius: 4px;
   `,
   icon: css`
