@@ -37,11 +37,17 @@ const MusicList = ({ onClick }: { onClick: (file: MusicFile) => void }) => {
         <Button
           icon={<LibraryMusicIcon />}
           onClick={() => setMode("cover")}
-          color="primary"
+          color={mode === "cover" ? "primary" : "default"}
+          rounded
         >
           アルバム
         </Button>
-        <Button icon={<ViewListIcon />} onClick={() => setMode("list")}>
+        <Button
+          icon={<ViewListIcon />}
+          onClick={() => setMode("list")}
+          color={mode === "list" ? "primary" : "default"}
+          rounded
+        >
           曲一覧
         </Button>
       </div>

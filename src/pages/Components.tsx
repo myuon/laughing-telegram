@@ -51,6 +51,9 @@ export const ComponentsPage = () => {
         >
           <Button color="primary">Subscribe</Button>
           <Button color="primary">プライマリー</Button>
+          <Button color="primary" rounded>
+            プライマリー
+          </Button>
           <Button>Cancel</Button>
           <Button>キャンセル</Button>
         </div>

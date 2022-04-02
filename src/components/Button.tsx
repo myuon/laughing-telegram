@@ -14,6 +14,9 @@ const styles = {
     gap: 8px;
     align-items: center;
   `,
+  rounded: css`
+    border-radius: 9999px;
+  `,
   colors: {
     primary: css`
       color: ${theme.palette.primary.contrastText};
@@ -50,16 +53,26 @@ export interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
   icon?: React.ReactNode;
   children: React.ReactNode;
   color?: "primary" | "default";
+  rounded?: boolean;
 }
 
 export const Button = ({
   icon,
   children,
   color = "default",
+  rounded = false,
   ...props
 }: ButtonProps) => {
   return (
-    <button {...props} css={[styles.base, styles.icon, styles.colors[color]]}>
+    <button
+      {...props}
+      css={[
+        styles.base,
+        styles.icon,
+        styles.colors[color],
+        rounded && styles.rounded,
+      ]}
+    >
       {icon}
       {children}
     </button>
