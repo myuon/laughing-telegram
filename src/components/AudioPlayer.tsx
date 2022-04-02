@@ -26,7 +26,11 @@ export const AudioPlayer = ({
       css={css`
         display: grid;
         gap: 16px;
-        margin: 16px 0;
+        margin: 24px 0;
+
+        @media screen and (max-width: ${theme.width.large}px) {
+          margin: 16px 0;
+        }
       `}
     >
       <div
@@ -77,7 +81,11 @@ export const AudioPlayer = ({
           </h2>
           <p
             css={css`
+              display: -webkit-box;
+              overflow: hidden;
               color: ${theme.palette.gray[700]};
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
             `}
           >
             {artist}

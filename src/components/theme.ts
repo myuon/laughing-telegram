@@ -1,3 +1,5 @@
+import { css } from "@emotion/react";
+
 export const theme = {
   width: {
     large: 1024,
@@ -55,4 +57,10 @@ export const theme = {
     5: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
     6: "0 25px 50px -12px rgb(0 0 0 / 0.25)",
   },
+  glassmorphism: css`
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(12px);
+  `,
 };

@@ -15,6 +15,7 @@ import ViewListIcon from "@mui/icons-material/ViewList";
 import { Button } from "../components/Button";
 import { AudioPlayer } from "../components/AudioPlayer";
 import { getCoverImageInBase64 } from "../model/Metadata";
+import { theme } from "../components/theme";
 
 const MusicList = ({ onClick }: { onClick: (file: MusicFile) => void }) => {
   const { userId } = useAuth();
@@ -68,13 +69,15 @@ const Player = ({ fullPath }: { fullPath?: string }) => {
 
   return (
     <div
-      css={css`
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background-color: white;
-      `}
+      css={[
+        theme.glassmorphism,
+        css`
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+        `,
+      ]}
     >
       <div
         css={css`
