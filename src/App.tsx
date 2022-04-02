@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import React from "react";
 import { BrowserRouter, Navigate } from "react-router-dom";
+import { SWRConfig } from "swr";
 import { LinkButton } from "./components/Button";
 import { Router } from "./components/Router";
 import { AuthProvider, useAuth, useInitializeUseAuth } from "./helpers/useAuth";
@@ -8,11 +9,19 @@ import ComponentsPage from "./pages/Components";
 import IndexPage from "./pages/Index";
 import LoginPage from "./pages/Login";
 
+const swrOptions = {
+  revalidateOnFocus: false,
+};
+
 const Providers = ({ children }: { children: React.ReactNode }) => {
   // This depends on BrowserRouter
   const value = useInitializeUseAuth();
 
-  return <AuthProvider value={value}>{children}</AuthProvider>;
+  return (
+    <AuthProvider value={value}>
+      <SWRConfig value={swrOptions}>{children}</SWRConfig>
+    </AuthProvider>
+  );
 };
 
 const authRoutes = [
