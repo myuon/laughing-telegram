@@ -19,37 +19,41 @@ const styles = {
     gap: 8px;
     align-items: center;
   `,
+  colors: {
+    primary: css`
+      color: ${theme.palette.primary.contrastText};
+      background-color: ${theme.palette.primary.main};
+      box-shadow: ${theme.shadow[3].replaceAll(
+        "rgb(0 0 0 / 0.1)",
+        `rgb(${Color(theme.palette.primary.main).array().join(" ")} / 0.2)`
+      )};
+
+      &:hover {
+        background-color: ${theme.palette.primary.dark};
+      }
+      &:active {
+        box-shadow: ${theme.shadow[4].replaceAll(
+          "rgb(0 0 0 / 0.1)",
+          `rgb(${Color(theme.palette.primary.main).array().join(" ")} / 0.2)`
+        )};
+      }
+    `,
+    default: css`
+      background-color: ${theme.palette.gray[100]};
+
+      &:hover {
+        background-color: ${theme.palette.gray[200]};
+      }
+      &:active {
+        background-color: ${theme.palette.gray[300]};
+      }
+    `,
+  },
 };
 
 export const PrimaryButton = ({ icon, children, ...props }: ButtonProps) => {
   return (
-    <button
-      {...props}
-      css={[
-        styles.base,
-        styles.icon,
-        css`
-          color: ${theme.palette.primary.contrastText};
-          background-color: ${theme.palette.primary.main};
-          box-shadow: ${theme.shadow[3].replaceAll(
-            "rgb(0 0 0 / 0.1)",
-            `rgb(${Color(theme.palette.primary.main).array().join(" ")} / 0.2)`
-          )};
-
-          &:hover {
-            background-color: ${theme.palette.primary.dark};
-          }
-          &:active {
-            box-shadow: ${theme.shadow[4].replaceAll(
-              "rgb(0 0 0 / 0.1)",
-              `rgb(${Color(theme.palette.primary.main)
-                .array()
-                .join(" ")} / 0.2)`
-            )};
-          }
-        `,
-      ]}
-    >
+    <button {...props} css={[styles.base, styles.icon, styles.colors.primary]}>
       {icon}
       {children}
     </button>
@@ -58,23 +62,7 @@ export const PrimaryButton = ({ icon, children, ...props }: ButtonProps) => {
 
 export const Button = ({ icon, children, ...props }: ButtonProps) => {
   return (
-    <button
-      {...props}
-      css={[
-        styles.base,
-        styles.icon,
-        css`
-          background-color: ${theme.palette.gray[100]};
-
-          &:hover {
-            background-color: ${theme.palette.gray[200]};
-          }
-          &:active {
-            background-color: ${theme.palette.gray[300]};
-          }
-        `,
-      ]}
-    >
+    <button {...props} css={[styles.base, styles.icon, styles.colors.default]}>
       {icon}
       {children}
     </button>
