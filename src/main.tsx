@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import "./firebase";
+import "./api/firebase";
 import "ress";
 import { css, Global } from "@emotion/react";
 import { theme } from "./components/theme";

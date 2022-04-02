@@ -1,5 +1,5 @@
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage } from "../firebase";
+import { storage } from "../api/firebase";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../helpers/useAuth";
 import { css } from "@emotion/react";
