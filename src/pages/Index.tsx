@@ -1,22 +1,13 @@
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { ref, uploadBytes } from "firebase/storage";
 import { storage } from "../api/firebase";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useAuth } from "../helpers/useAuth";
 import { css } from "@emotion/react";
-
-const getRef = (userId: string) => {
-  return ref(storage, `/user/${userId}/file.mp3`);
-};
+import { useDownloadUrl } from "../api/storage";
 
 export const IndexPage = () => {
   const { userId } = useAuth();
-
-  const [url, setUrl] = useState<string>();
-  useEffect(() => {
-    if (userId) {
-      getDownloadURL(getRef(userId)).then(setUrl);
-    }
-  }, [userId]);
+  const { data: url } = useDownloadUrl(`/user/${userId}/file.mp3`);
 
   return userId ? (
     <div
@@ -31,7 +22,10 @@ export const IndexPage = () => {
           const file = event.currentTarget.files?.[0];
           if (!file) return;
 
-          const snapshot = await uploadBytes(getRef(userId), file);
+          const snapshot = await uploadBytes(
+            ref(storage, `/user/${userId}/file.mp3`),
+            file
+          );
           console.log(snapshot);
         }}
       />
