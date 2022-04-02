@@ -37,10 +37,12 @@ export const AudioPlayer = ({
         css={css`
           position: relative;
           display: flex;
-          gap: 16px;
+          gap: 32px;
           align-items: flex-end;
+          margin: 0 32px;
 
           @media screen and (max-width: ${theme.width.large}px) {
+            gap: 16px;
             margin: 0 16px;
           }
         `}
