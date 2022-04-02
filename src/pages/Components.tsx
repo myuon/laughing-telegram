@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import React from "react";
-import { PrimaryButton, Button, LinkButton } from "../components/Button";
+import { Button, LinkButton } from "../components/Button";
 import { theme } from "../components/theme";
 
 export const ComponentsPage = () => {
@@ -49,8 +49,8 @@ export const ComponentsPage = () => {
             gap: 8px;
           `}
         >
-          <PrimaryButton>Subscribe</PrimaryButton>
-          <PrimaryButton>プライマリー</PrimaryButton>
+          <Button color="primary">Subscribe</Button>
+          <Button color="primary">プライマリー</Button>
           <Button>Cancel</Button>
           <Button>キャンセル</Button>
         </div>

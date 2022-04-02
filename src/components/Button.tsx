@@ -3,11 +3,6 @@ import Color from "color";
 import React, { ComponentPropsWithoutRef } from "react";
 import { theme } from "./theme";
 
-export interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
-  icon?: React.ReactNode;
-  children: React.ReactNode;
-}
-
 const styles = {
   base: css`
     height: 40px;
@@ -51,18 +46,20 @@ const styles = {
   },
 };
 
-export const PrimaryButton = ({ icon, children, ...props }: ButtonProps) => {
-  return (
-    <button {...props} css={[styles.base, styles.icon, styles.colors.primary]}>
-      {icon}
-      {children}
-    </button>
-  );
-};
+export interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+  color?: "primary" | "default";
+}
 
-export const Button = ({ icon, children, ...props }: ButtonProps) => {
+export const Button = ({
+  icon,
+  children,
+  color = "default",
+  ...props
+}: ButtonProps) => {
   return (
-    <button {...props} css={[styles.base, styles.icon, styles.colors.default]}>
+    <button {...props} css={[styles.base, styles.icon, styles.colors[color]]}>
       {icon}
       {children}
     </button>

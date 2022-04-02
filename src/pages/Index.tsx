@@ -7,7 +7,7 @@ import { ListView } from "./Index/ListView";
 import { MusicFile } from "../model/MusicFile";
 import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import ViewListIcon from "@mui/icons-material/ViewList";
-import { Button, PrimaryButton } from "../components/Button";
+import { Button } from "../components/Button";
 
 const AudioPlayer = ({ src }: { src?: string }) => {
   const { data: url } = useDownloadUrl(src);
@@ -34,12 +34,13 @@ const MusicList = ({ onClick }: { onClick: (file: MusicFile) => void }) => {
           justify-content: center;
         `}
       >
-        <PrimaryButton
+        <Button
           icon={<LibraryMusicIcon />}
           onClick={() => setMode("cover")}
+          color="primary"
         >
           アルバム
-        </PrimaryButton>
+        </Button>
         <Button icon={<ViewListIcon />} onClick={() => setMode("list")}>
           曲一覧
         </Button>
