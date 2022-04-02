@@ -1,7 +1,10 @@
+import { css } from "@emotion/react";
 import React from "react";
 import { BrowserRouter, Navigate } from "react-router-dom";
+import { LinkButton } from "./components/Button";
 import { Router } from "./components/Router";
 import { AuthProvider, useAuth, useInitializeUseAuth } from "./helpers/useAuth";
+import ComponentsPage from "./pages/Components";
 import IndexPage from "./pages/Index";
 import LoginPage from "./pages/Login";
 
@@ -18,13 +21,17 @@ const authRoutes = [
     element: <IndexPage />,
   },
   {
+    path: "/components",
+    element: <ComponentsPage />,
+  },
+  {
     path: "*",
     element: <Navigate to="/" replace />,
   },
 ];
 
 const noAuthRoutes = [
-  { path: "login", element: <LoginPage /> },
+  { path: "/login", element: <LoginPage /> },
   {
     path: "*",
     element: <Navigate to="/login" replace />,
@@ -36,8 +43,13 @@ const AppRoutes = () => {
 
   return loading ? null : authenticated ? (
     <>
-      <header>
-        <button onClick={logout}>LOGOUT</button>
+      <header
+        css={css`
+          display: flex;
+          justify-content: flex-end;
+        `}
+      >
+        <LinkButton onClick={logout}>LOGOUT</LinkButton>
       </header>
       <main>
         <Router routes={authRoutes} />
