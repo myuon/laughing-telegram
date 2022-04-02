@@ -27,8 +27,8 @@ export const useListAll = (key: string) => {
   });
 };
 
-export const useFetchMetadata = (key: string) => {
-  return useSWR(["fetchMetadata", key], async () => {
+export const useFetchMetadata = (key: string | undefined) => {
+  return useSWR(key ? ["fetchMetadata", key] : null, async () => {
     const storageKey = ref(storage, `${key}.metadata`);
     const blob = await getBlob(storageKey);
     return JSON.parse(await blob.text()) as Metadata;

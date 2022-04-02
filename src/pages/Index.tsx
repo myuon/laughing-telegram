@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { useAuth } from "../helpers/useAuth";
 import { css } from "@emotion/react";
-import { uploadMusicFile, useDownloadUrl, useListAll } from "../api/storage";
+import {
+  uploadMusicFile,
+  useDownloadUrl,
+  useFetchMetadata,
+  useListAll,
+} from "../api/storage";
 import { CoverView } from "./Index/CoverView";
 import { ListView } from "./Index/ListView";
 import { MusicFile } from "../model/MusicFile";
 import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import { Button } from "../components/Button";
-
-const AudioPlayer = ({ src }: { src?: string }) => {
-  const { data: url } = useDownloadUrl(src);
-
-  return <audio src={url} controls autoPlay muted />;
-};
+import { AudioPlayer } from "../components/AudioPlayer";
+import { getCoverImageInBase64 } from "../model/Metadata";
 
 const MusicList = ({ onClick }: { onClick: (file: MusicFile) => void }) => {
   const { userId } = useAuth();
@@ -61,6 +62,36 @@ const MusicList = ({ onClick }: { onClick: (file: MusicFile) => void }) => {
   );
 };
 
+const Player = ({ fullPath }: { fullPath?: string }) => {
+  const { data: src } = useDownloadUrl(fullPath);
+  const { data: meta } = useFetchMetadata(fullPath);
+
+  return (
+    <div
+      css={css`
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: white;
+      `}
+    >
+      <div
+        css={css`
+          margin: 0 auto;
+        `}
+      >
+        <AudioPlayer
+          src={src}
+          coverSrc={getCoverImageInBase64(meta)}
+          title={meta?.title}
+          artist={meta?.artist}
+        />
+      </div>
+    </div>
+  );
+};
+
 export const IndexPage = () => {
   const { userId } = useAuth();
   const [selected, setSelected] = useState<string>();
@@ -90,7 +121,7 @@ export const IndexPage = () => {
 
       <MusicList onClick={(file) => setSelected(file.fullPath)} />
 
-      <AudioPlayer src={selected} />
+      <Player fullPath={selected} />
     </div>
   );
 };

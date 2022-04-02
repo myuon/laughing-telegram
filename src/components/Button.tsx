@@ -6,10 +6,12 @@ import { theme } from "./theme";
 const styles = {
   base: css`
     height: 40px;
+    border-radius: 4px;
+  `,
+  text: css`
     padding: 0 20px;
     overflow: hidden;
     white-space: nowrap;
-    border-radius: 4px;
   `,
   icon: css`
     display: flex;
@@ -70,6 +72,7 @@ export const Button = ({
       {...props}
       css={[
         styles.base,
+        styles.text,
         styles.icon,
         styles.colors[color],
         rounded && styles.rounded,
@@ -77,6 +80,36 @@ export const Button = ({
     >
       {icon}
       {children}
+    </button>
+  );
+};
+
+export const IconButton = ({
+  icon,
+  color = "default",
+  rounded = false,
+  ...props
+}: Omit<ButtonProps, "children">) => {
+  return (
+    <button
+      {...props}
+      css={[
+        styles.base,
+        styles.icon,
+        styles.colors[color],
+        rounded && styles.rounded,
+        css`
+          display: flex;
+          justify-content: center;
+          aspect-ratio: 1 / 1;
+
+          svg {
+            font-size: inherit;
+          }
+        `,
+      ]}
+    >
+      {icon}
     </button>
   );
 };

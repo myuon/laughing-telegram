@@ -43,3 +43,11 @@ const parseID3TagAsMetadata = (tag: ID3Tag | null): Metadata => {
 export const parseMetadataFromFile = async (file: File): Promise<Metadata> => {
   return parseID3TagAsMetadata(await id3.fromFile(file));
 };
+
+export const getCoverImageInBase64 = (meta?: Metadata) => {
+  const image = meta?.images?.[0];
+
+  return image
+    ? `data:${image?.mime ?? "image/jpg"};base64,${image?.data}`
+    : undefined;
+};

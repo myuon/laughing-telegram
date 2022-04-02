@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import React, { useMemo } from "react";
 import { useFetchMetadata } from "../../api/storage";
 import { theme } from "../../components/theme";
+import { getCoverImageInBase64 } from "../../model/Metadata";
 import { MusicFile } from "../../model/MusicFile";
 
 const MusicItem = ({
@@ -37,7 +38,7 @@ const MusicItem = ({
     >
       {image ? (
         <button onClick={onClick}>
-          <img src={`data:${image.mime ?? "image/jpg"};base64,${image.data}`} />
+          <img src={getCoverImageInBase64(metadata)} />
         </button>
       ) : (
         <button
@@ -74,6 +75,11 @@ export const CoverView = ({
         gap: 16px;
 
         @media screen and (max-width: ${theme.width.large}px) {
+          grid-template-columns: repeat(4, 1fr);
+          gap: 16px;
+        }
+
+        @media screen and (max-width: ${theme.width.small}px) {
           grid-template-columns: repeat(2, 1fr);
           gap: 16px;
         }
