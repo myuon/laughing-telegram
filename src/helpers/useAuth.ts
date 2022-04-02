@@ -3,6 +3,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export interface AuthContextState {
+  authenticated: boolean;
+  loading: boolean;
   userId: string | undefined;
   token: string | undefined;
   login: (token: string, userId: string) => Promise<void>;
@@ -16,7 +18,7 @@ export const AuthProvider = AuthContext.Provider;
 
 const IDB_TOKEN_KEY = "token";
 
-export const initializeUseAuth = () => {
+export const useInitializeUseAuth = () => {
   interface IdbTokenData {
     token: string;
     userId: string;
@@ -25,24 +27,30 @@ export const initializeUseAuth = () => {
   const navigate = useNavigate();
   const [token, setToken] = useState<string | undefined>();
   const [userId, setUserId] = useState<string>();
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (!token) {
       (async () => {
         const data = (await get(IDB_TOKEN_KEY)) as IdbTokenData | undefined;
         if (!data) {
-          return navigate("/login");
+          // The redirect here will be done by Router in App (should be handled here? idk🙄)
+          setLoading(false);
+          return;
         }
 
         setToken(data.token);
         setUserId(data.userId);
+        setLoading(false);
       })();
     }
-  }, []);
+  }, [navigate, token]);
 
   const value = useMemo(
     () => ({
       token,
       userId,
+      authenticated: !!token,
+      loading,
       login: async (token: string, userId: string) => {
         setToken(token);
         await set(IDB_TOKEN_KEY, {
@@ -59,7 +67,7 @@ export const initializeUseAuth = () => {
         navigate("/login");
       },
     }),
-    []
+    [loading, navigate, token, userId]
   );
 
   return value;

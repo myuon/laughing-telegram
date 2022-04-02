@@ -1,9 +1,11 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    // そういうことよ
-    match /{allPaths=**} {
-      allow read, write if request.auth != null && request.auth.admin == true;
+    match /user/{userId}/{allPaths=**} {
+      allow read, write: if request.auth != null
+        && request.auth.uid == userId
+        // HI ADMIN!
+        && request.auth.admin == true;
     }
   }
 }
