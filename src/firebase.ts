@@ -14,5 +14,6 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 
 export const storage = getStorage(app);
+// connectStorageEmulator(storage, "localhost", 9199);
 
 export const auth = getAuth();

@@ -5,7 +5,7 @@ service firebase.storage {
       allow read, write: if request.auth != null
         && request.auth.uid == userId
         // HI ADMIN!
-        && request.auth.admin == true;
+        && request.auth.token.admin == true;
     }
   }
 }
