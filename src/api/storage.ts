@@ -9,6 +9,7 @@ import {
 import useSWR from "swr";
 import { storage } from "./firebase";
 import { Metadata, parseMetadataFromFile } from "../model/Metadata";
+import { MusicFile } from "../model/MusicFile";
 
 export const useDownloadUrl = (key: string | undefined) => {
   return useSWR(key ? ["downloadUrl", key] : null, async () => {
@@ -18,7 +19,7 @@ export const useDownloadUrl = (key: string | undefined) => {
 };
 
 export const useListAll = (key: string) => {
-  return useSWR(["listAll", key], async () => {
+  return useSWR<MusicFile[]>(["listAll", key], async () => {
     const storageKey = ref(storage, key);
     return await (await listAll(storageKey)).items
       .map((item) => ({ fullPath: item.fullPath, name: item.name }))

@@ -3,17 +3,30 @@ import Color from "color";
 import React, { ComponentPropsWithoutRef } from "react";
 import { theme } from "./theme";
 
-const buttonStyle = css`
-  padding: 12px 20px;
-  border-radius: 4px;
-`;
+export interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+}
 
-export const PrimaryButton = (props: ComponentPropsWithoutRef<"button">) => {
+const styles = {
+  base: css`
+    padding: 8px 20px;
+    border-radius: 4px;
+  `,
+  icon: css`
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  `,
+};
+
+export const PrimaryButton = ({ icon, children, ...props }: ButtonProps) => {
   return (
     <button
       {...props}
       css={[
-        buttonStyle,
+        styles.base,
+        styles.icon,
         css`
           color: ${theme.palette.primary.contrastText};
           background-color: ${theme.palette.primary.main};
@@ -35,28 +48,35 @@ export const PrimaryButton = (props: ComponentPropsWithoutRef<"button">) => {
           }
         `,
       ]}
-    />
+    >
+      {icon}
+      {children}
+    </button>
   );
 };
 
-export const Button = (props: ComponentPropsWithoutRef<"button">) => {
+export const Button = ({ icon, children, ...props }: ButtonProps) => {
   return (
     <button
       {...props}
       css={[
-        buttonStyle,
+        styles.base,
+        styles.icon,
         css`
-          background-color: ${theme.palette.gray[50]};
+          background-color: ${theme.palette.gray[100]};
 
           &:hover {
-            background-color: ${theme.palette.gray[100]};
+            background-color: ${theme.palette.gray[200]};
           }
           &:active {
-            background-color: ${theme.palette.gray[200]};
+            background-color: ${theme.palette.gray[300]};
           }
         `,
       ]}
-    />
+    >
+      {icon}
+      {children}
+    </button>
   );
 };
 

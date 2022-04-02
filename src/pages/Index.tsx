@@ -1,19 +1,13 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { useAuth } from "../helpers/useAuth";
 import { css } from "@emotion/react";
-import {
-  uploadMusicFile,
-  useDownloadUrl,
-  useFetchMetadata,
-  useListAll,
-} from "../api/storage";
-import { LinkButton } from "../components/Button";
-import { theme } from "../components/theme";
-
-interface MusicFileObject {
-  fullPath: string;
-  name: string;
-}
+import { uploadMusicFile, useDownloadUrl, useListAll } from "../api/storage";
+import { CoverView } from "./Index/CoverView";
+import { ListView } from "./Index/ListView";
+import { MusicFile } from "../model/MusicFile";
+import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
+import ViewListIcon from "@mui/icons-material/ViewList";
+import { Button, PrimaryButton } from "../components/Button";
 
 const AudioPlayer = ({ src }: { src?: string }) => {
   const { data: url } = useDownloadUrl(src);
@@ -21,67 +15,47 @@ const AudioPlayer = ({ src }: { src?: string }) => {
   return <audio src={url} controls autoPlay muted />;
 };
 
-const MusicItem = ({
-  file,
-  onClick,
-}: {
-  file: MusicFileObject;
-  onClick: () => void;
-}) => {
-  const { data: metadata } = useFetchMetadata(file.fullPath);
-  const image = useMemo(() => metadata?.images?.[0], [metadata?.images]);
+const MusicList = ({ onClick }: { onClick: (file: MusicFile) => void }) => {
+  const { userId } = useAuth();
+  const { data: files } = useListAll(`/user/${userId}`);
+  const [mode, setMode] = useState<"cover" | "list">("cover");
 
   return (
     <div
       css={css`
         display: grid;
-        gap: 4px;
-
-        & > div {
-          width: 250px;
-          aspect-ratio: 1;
-          border-radius: 4px;
-          box-shadow: ${theme.shadow[5]};
-
-          img {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            border-radius: inherit;
-            box-shadow: ${theme.shadow[5]};
-          }
-        }
+        gap: 32px;
       `}
     >
-      {image ? (
-        <div>
-          <img src={`data:${image.mime ?? "image/jpg"};base64,${image.data}`} />
-        </div>
-      ) : (
-        <div
-          css={[
-            theme.typography.h3,
-            css`
-              display: grid;
-              place-items: center;
-              color: white;
-              background-color: ${theme.palette.gray[300]};
-            `,
-          ]}
+      <div
+        css={css`
+          display: flex;
+          gap: 8px;
+          justify-content: center;
+        `}
+      >
+        <PrimaryButton
+          icon={<LibraryMusicIcon />}
+          onClick={() => setMode("cover")}
         >
-          NO IMAGE
-        </div>
-      )}
+          アルバム
+        </PrimaryButton>
+        <Button icon={<ViewListIcon />} onClick={() => setMode("list")}>
+          曲一覧
+        </Button>
+      </div>
 
-      <LinkButton onClick={onClick}>{file.name}</LinkButton>
+      {mode === "cover" ? (
+        <CoverView files={files} onClick={onClick} />
+      ) : (
+        <ListView files={files} onClick={onClick} />
+      )}
     </div>
   );
 };
 
 export const IndexPage = () => {
   const { userId } = useAuth();
-  const { data: files } = useListAll(`/user/${userId}`);
-
   const [selected, setSelected] = useState<string>();
 
   return (
@@ -101,21 +75,7 @@ export const IndexPage = () => {
         }}
       />
 
-      <div
-        css={css`
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 8px;
-        `}
-      >
-        {files?.map((file) => (
-          <MusicItem
-            key={file.fullPath}
-            file={file}
-            onClick={() => setSelected(file.fullPath)}
-          />
-        ))}
-      </div>
+      <MusicList onClick={(file) => setSelected(file.fullPath)} />
 
       <AudioPlayer src={selected} />
     </div>
