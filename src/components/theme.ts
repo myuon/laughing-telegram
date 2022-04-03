@@ -67,7 +67,7 @@ export const theme = {
     overflow: hidden;
 
     img {
-      filter: blur(32px);
+      filter: blur(15px);
     }
   `,
 };

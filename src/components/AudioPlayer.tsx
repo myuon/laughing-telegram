@@ -55,6 +55,11 @@ const styles = {
       }
     }
   `,
+  hideInMobile: css`
+    @media screen and (max-width: ${theme.width.small}px) {
+      display: none;
+    }
+  `,
 };
 
 export const AudioPlayer = ({
@@ -263,6 +268,7 @@ export const AudioPlayer = ({
                     opacity: 0.5;
                   }
                 `,
+                styles.hideInMobile,
               ]}
               data-muted={muted}
             >
