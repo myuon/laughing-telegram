@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { theme } from "./theme";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { IconButton, LinkButton } from "./Button";
@@ -7,6 +7,8 @@ import RepeatOneIcon from "@mui/icons-material/RepeatOne";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import DownloadDoneIcon from "@mui/icons-material/DownloadDone";
 import ShuffleIcon from "@mui/icons-material/Shuffle";
+import PauseIcon from "@mui/icons-material/Pause";
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 
 export const AudioPlayer = ({
   src,
@@ -19,7 +21,10 @@ export const AudioPlayer = ({
   title?: string;
   artist?: string;
 }) => {
-  const ref = useRef(null);
+  const ref = useRef<HTMLAudioElement | null>(null);
+  const [playing, setPlaying] = useState(false);
+  const [muted, setMuted] = useState(true);
+  const [loop, setLoop] = useState(true);
 
   return (
     <div
@@ -95,7 +100,15 @@ export const AudioPlayer = ({
         </div>
       </div>
 
-      <audio ref={ref} src={src} autoPlay loop muted />
+      <audio
+        ref={ref}
+        src={src}
+        autoPlay
+        loop={loop}
+        muted={muted}
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+      />
 
       <div>
         <div
@@ -129,7 +142,16 @@ export const AudioPlayer = ({
                   font-size: 28px;
                 }
               }
+
+              &[aria-enabled="true"] {
+                color: ${theme.palette.primary.main};
+              }
+              &[aria-enabled="false"] {
+                color: inherit;
+              }
             `}
+            aria-enabled={loop}
+            onClick={() => setLoop((t) => !t)}
           >
             <RepeatOneIcon />
           </LinkButton>
@@ -148,7 +170,7 @@ export const AudioPlayer = ({
           </LinkButton>
         </div>
         <IconButton
-          icon={<PlayArrowIcon />}
+          icon={playing ? <PauseIcon /> : <PlayArrowIcon />}
           rounded
           color="primary"
           css={css`
@@ -160,6 +182,9 @@ export const AudioPlayer = ({
               font-size: 36px;
             }
           `}
+          onClick={() => {
+            ref.current?.paused ? ref.current?.play() : ref.current?.pause();
+          }}
         />
         <div
           css={css`
@@ -191,8 +216,19 @@ export const AudioPlayer = ({
                 }
               }
             `}
+            onClick={() => {
+              if (!ref.current) return;
+
+              if (muted) {
+                ref.current.muted = false;
+                setMuted(false);
+              } else {
+                ref.current.muted = true;
+                setMuted(true);
+              }
+            }}
           >
-            <VolumeOffIcon />
+            {muted ? <VolumeUpIcon /> : <VolumeOffIcon />}
           </LinkButton>
         </div>
       </div>
