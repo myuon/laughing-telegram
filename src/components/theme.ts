@@ -63,4 +63,11 @@ export const theme = {
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(12px);
   `,
+  censorship: css`
+    overflow: hidden;
+
+    img {
+      filter: blur(32px);
+    }
+  `,
 };

@@ -12,6 +12,35 @@ import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
+const ProgressBar = ({ progress }: { progress: number }) => {
+  return (
+    <div
+      css={css`
+        position: relative;
+      `}
+    >
+      <div
+        css={[
+          css`
+            position: absolute;
+            height: 8px;
+            background-color: ${theme.palette.primary.main};
+            transition: width 0.15s linear;
+          `,
+          { width: `${progress * 100}%` },
+        ]}
+      />
+      <div
+        css={css`
+          width: 100%;
+          height: 8px;
+          background-color: ${theme.palette.gray[100]};
+        `}
+      />
+    </div>
+  );
+};
+
 const styles = {
   iconButton: css`
     display: grid;
@@ -50,6 +79,9 @@ export const AudioPlayer = ({
       ref.current.loop = loop;
     }
   }, [loop, volume]);
+
+  const [duration, setDuration] = useState(0);
+  const [seekPosition, setSeekPosition] = useState(0);
 
   return (
     <div
@@ -133,17 +165,15 @@ export const AudioPlayer = ({
         muted={muted}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
+        onTimeUpdate={(element) =>
+          setSeekPosition(element.currentTarget.currentTime)
+        }
+        onDurationChange={(element) =>
+          setDuration(element.currentTarget.duration)
+        }
       />
 
-      <div>
-        <div
-          css={css`
-            width: 100%;
-            height: 8px;
-            background-color: ${theme.palette.primary.main};
-          `}
-        />
-      </div>
+      <ProgressBar progress={duration > 0 ? seekPosition / duration : 0} />
 
       <div
         css={css`
@@ -164,15 +194,14 @@ export const AudioPlayer = ({
               styles.iconButton,
               styles.iconWrapper,
               css`
-                &[aria-enabled="true"] {
+                color: inherit;
+
+                &[aria-selected="true"] {
                   color: ${theme.palette.primary.main};
-                }
-                &[aria-enabled="false"] {
-                  color: inherit;
                 }
               `,
             ]}
-            aria-enabled={loop}
+            aria-selected={loop}
             onClick={() => setLoop((t) => !t)}
           />
           <LinkButton icon={<ShuffleIcon />} css={[styles.iconWrapper]} />
