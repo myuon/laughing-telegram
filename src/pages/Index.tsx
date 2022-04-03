@@ -122,7 +122,13 @@ export const IndexPage = () => {
         }}
       />
 
-      <MusicList onClick={(file) => setSelected(file.fullPath)} />
+      <div
+        css={css`
+          margin-bottom: 250px;
+        `}
+      >
+        <MusicList onClick={(file) => setSelected(file.fullPath)} />
+      </div>
 
       <Player fullPath={selected} />
     </div>
