@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { theme } from "./theme";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { IconButton, LinkButton } from "./Button";
@@ -9,6 +9,24 @@ import DownloadDoneIcon from "@mui/icons-material/DownloadDone";
 import ShuffleIcon from "@mui/icons-material/Shuffle";
 import PauseIcon from "@mui/icons-material/Pause";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+
+const styles = {
+  iconButton: css`
+    display: grid;
+    align-items: center;
+  `,
+  iconWrapper: css`
+    svg {
+      font-size: 36px;
+
+      @media screen and (max-width: ${theme.width.small}px) {
+        font-size: 28px;
+      }
+    }
+  `,
+};
 
 export const AudioPlayer = ({
   src,
@@ -25,6 +43,13 @@ export const AudioPlayer = ({
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(true);
   const [loop, setLoop] = useState(true);
+  const [volume, setVolume] = useState(100);
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.volume = volume / 100;
+      ref.current.loop = loop;
+    }
+  }, [loop, volume]);
 
   return (
     <div
@@ -134,40 +159,23 @@ export const AudioPlayer = ({
           `}
         >
           <LinkButton
-            css={css`
-              svg {
-                font-size: 36px;
-
-                @media screen and (max-width: ${theme.width.small}px) {
-                  font-size: 28px;
+            icon={<RepeatOneIcon />}
+            css={[
+              styles.iconButton,
+              styles.iconWrapper,
+              css`
+                &[aria-enabled="true"] {
+                  color: ${theme.palette.primary.main};
                 }
-              }
-
-              &[aria-enabled="true"] {
-                color: ${theme.palette.primary.main};
-              }
-              &[aria-enabled="false"] {
-                color: inherit;
-              }
-            `}
+                &[aria-enabled="false"] {
+                  color: inherit;
+                }
+              `,
+            ]}
             aria-enabled={loop}
             onClick={() => setLoop((t) => !t)}
-          >
-            <RepeatOneIcon />
-          </LinkButton>
-          <LinkButton
-            css={css`
-              svg {
-                font-size: 36px;
-
-                @media screen and (max-width: ${theme.width.small}px) {
-                  font-size: 28px;
-                }
-              }
-            `}
-          >
-            <ShuffleIcon />
-          </LinkButton>
+          />
+          <LinkButton icon={<ShuffleIcon />} css={[styles.iconWrapper]} />
         </div>
         <IconButton
           icon={playing ? <PauseIcon /> : <PlayArrowIcon />}
@@ -193,43 +201,67 @@ export const AudioPlayer = ({
             justify-content: space-evenly;
           `}
         >
-          <LinkButton
+          <LinkButton icon={<DownloadDoneIcon />} css={styles.iconWrapper} />
+          <div
             css={css`
-              svg {
-                font-size: 36px;
-
-                @media screen and (max-width: ${theme.width.small}px) {
-                  font-size: 28px;
-                }
-              }
+              display: flex;
+              gap: 16px;
+              align-items: center;
             `}
           >
-            <DownloadDoneIcon />
-          </LinkButton>
-          <LinkButton
-            css={css`
-              svg {
-                font-size: 36px;
+            <LinkButton
+              icon={muted ? <VolumeUpIcon /> : <VolumeOffIcon />}
+              css={styles.iconWrapper}
+              onClick={() => {
+                if (!ref.current) return;
 
-                @media screen and (max-width: ${theme.width.small}px) {
-                  font-size: 28px;
+                if (muted) {
+                  ref.current.muted = false;
+                  setMuted(false);
+                } else {
+                  ref.current.muted = true;
+                  setMuted(true);
                 }
-              }
-            `}
-            onClick={() => {
-              if (!ref.current) return;
+              }}
+            />
+            <div
+              css={[
+                css`
+                  display: flex;
+                  gap: 4px;
 
-              if (muted) {
-                ref.current.muted = false;
-                setMuted(false);
-              } else {
-                ref.current.muted = true;
-                setMuted(true);
-              }
-            }}
-          >
-            {muted ? <VolumeUpIcon /> : <VolumeOffIcon />}
-          </LinkButton>
+                  &[data-muted="true"] {
+                    opacity: 0.5;
+                  }
+                `,
+              ]}
+              data-muted={muted}
+            >
+              <LinkButton
+                icon={<RemoveIcon />}
+                css={css`
+                  display: grid;
+                `}
+                onClick={() => setVolume((v) => Math.max(v - 10, 0))}
+              />
+              <p>
+                <code
+                  css={css`
+                    font-size: ${theme.typography.h2.fontSize};
+                  `}
+                >
+                  {volume}
+                </code>
+              </p>
+              <LinkButton
+                icon={<AddIcon />}
+                css={css`
+                  display: grid;
+                `}
+                onClick={() => setVolume((v) => Math.min(v + 10, 100))}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -55,7 +55,7 @@ const styles = {
 
 export interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
   icon?: React.ReactNode;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   color?: "primary" | "default";
   rounded?: boolean;
 }
@@ -114,7 +114,7 @@ export const IconButton = ({
   );
 };
 
-export const LinkButton = (props: ComponentPropsWithoutRef<"button">) => {
+export const LinkButton = ({ icon, children, ...props }: ButtonProps) => {
   return (
     <button
       {...props}
@@ -128,7 +128,15 @@ export const LinkButton = (props: ComponentPropsWithoutRef<"button">) => {
             text-decoration: none;
           }
         `,
+        icon &&
+          css`
+            display: grid;
+            align-items: center;
+          `,
       ]}
-    />
+    >
+      {icon}
+      {children}
+    </button>
   );
 };
