@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../api/firebase";
 import { useAuth } from "../helpers/useAuth";
@@ -8,15 +8,6 @@ const provider = new GoogleAuthProvider();
 
 export const LoginPage = () => {
   const { login } = useAuth();
-  useEffect(() => {
-    (async () => {
-      const token = await auth.currentUser?.getIdToken();
-      console.log(token);
-      if (token) {
-        login(token, auth.currentUser?.uid ?? "");
-      }
-    })();
-  }, [login]);
 
   return (
     <div>

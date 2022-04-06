@@ -28,6 +28,9 @@ export default defineConfig({
           },
         ],
       },
+      workbox: {
+        navigateFallbackDenylist: [/\/__\/auth/],
+      },
     }),
   ],
 });
