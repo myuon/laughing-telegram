@@ -5,6 +5,7 @@ import "./api/firebase";
 import "ress";
 import { css, Global } from "@emotion/react";
 import { theme } from "./components/theme";
+import { registerSW } from "virtual:pwa-register";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -72,3 +73,12 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
+
+const updateSW = registerSW({
+  onNeedRefresh() {
+    return;
+  },
+  onOfflineReady() {
+    return;
+  },
+});
