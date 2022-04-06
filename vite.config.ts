@@ -9,8 +9,30 @@ export default defineConfig({
       jsxImportSource: "@emotion/react",
     }),
     VitePWA({
-      devOptions: {
-        enabled: true,
+      includeAssets: ["favicon.svg", "favicon.ico", "apple-touch-icon.png"],
+      manifest: {
+        name: "myuon play music",
+        short_name: "myuon-play-music",
+        description: "",
+        theme_color: "#ffffff",
+        icons: [
+          {
+            src: "pwa-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "pwa-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
+          {
+            src: "pwa-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any maskable",
+          },
+        ],
       },
     }),
   ],
