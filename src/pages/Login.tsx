@@ -11,6 +11,7 @@ export const LoginPage = () => {
   useEffect(() => {
     (async () => {
       const token = await auth.currentUser?.getIdToken();
+      console.log(token);
       if (token) {
         login(token, auth.currentUser?.uid ?? "");
       }
