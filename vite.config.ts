@@ -29,6 +29,7 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // cf: https://github.com/NekR/offline-plugin/issues/412
         navigateFallbackDenylist: [/\/__\/auth/],
       },
     }),
