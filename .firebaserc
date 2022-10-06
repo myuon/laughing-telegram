@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "myuon-play-music-app"
-  }
+    "default": "myuon-play-music-app",
+    "prod": "myuon-play-music-app"
+  },
+  "targets": {}
 }
