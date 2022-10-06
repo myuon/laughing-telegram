@@ -11,6 +11,7 @@ import PauseIcon from "@mui/icons-material/Pause";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { useLocalStorage } from "./useLocalStorage";
 
 const ProgressBar = ({ progress }: { progress: number }) => {
   return (
@@ -77,7 +78,7 @@ export const AudioPlayer = ({
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(true);
   const [loop, setLoop] = useState(true);
-  const [volume, setVolume] = useState(100);
+  const [volume, setVolume] = useLocalStorage("volume", 50);
   useEffect(() => {
     if (ref.current) {
       ref.current.volume = volume / 100;
@@ -279,7 +280,7 @@ export const AudioPlayer = ({
                 css={css`
                   display: grid;
                 `}
-                onClick={() => setVolume((v) => Math.max(v - 10, 0))}
+                onClick={() => setVolume(Math.max(volume - 10, 0))}
               />
               <p
                 css={css`
@@ -301,9 +302,7 @@ export const AudioPlayer = ({
                       position: absolute;
                       bottom: 0;
                       left: 0;
-                      width: 16px;
                       margin-bottom: 24px;
-                      transform: translateX(-50%);
                     `}
                   >
                     <input
@@ -313,6 +312,7 @@ export const AudioPlayer = ({
                       value={volume}
                       onChange={(e) => setVolume(Number(e.target.value))}
                       css={css`
+                        width: 100%;
                         -webkit-appearance: slider-vertical;
                       `}
                     />
@@ -324,7 +324,7 @@ export const AudioPlayer = ({
                 css={css`
                   display: grid;
                 `}
-                onClick={() => setVolume((v) => Math.min(v + 10, 100))}
+                onClick={() => setVolume(Math.min(volume + 10, 100))}
               />
             </div>
           </div>
