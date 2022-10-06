@@ -88,6 +88,8 @@ export const AudioPlayer = ({
   const [duration, setDuration] = useState(0);
   const [seekPosition, setSeekPosition] = useState(0);
 
+  const [volumeSliderOpen, setVolumeSliderOpen] = useState(false);
+
   return (
     <div
       css={css`
@@ -279,14 +281,43 @@ export const AudioPlayer = ({
                 `}
                 onClick={() => setVolume((v) => Math.max(v - 10, 0))}
               />
-              <p>
+              <p
+                css={css`
+                  position: relative;
+                `}
+              >
                 <code
                   css={css`
                     font-size: ${theme.typography.h2.fontSize};
+                    cursor: pointer;
                   `}
+                  onClick={() => setVolumeSliderOpen((t) => !t)}
                 >
-                  {volume}
+                  {volume.toString().padStart(2, "0")}
                 </code>
+                {volumeSliderOpen && (
+                  <div
+                    css={css`
+                      position: absolute;
+                      bottom: 0;
+                      left: 0;
+                      width: 16px;
+                      margin-bottom: 24px;
+                      transform: translateX(-50%);
+                    `}
+                  >
+                    <input
+                      type="range"
+                      min={0}
+                      max={100}
+                      value={volume}
+                      onChange={(e) => setVolume(Number(e.target.value))}
+                      css={css`
+                        -webkit-appearance: slider-vertical;
+                      `}
+                    />
+                  </div>
+                )}
               </p>
               <LinkButton
                 icon={<AddIcon />}
